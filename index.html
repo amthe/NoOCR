@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>NoOCR, image obfuscation and anti content-filter</title>
+</head>
+<body>
+    <canvas id="canvas" ></canvas>
+    <input type="file" id="uploadFile" />
+    <input type="range" id="rangeSlider1" min="0" max="500" value="250">
+
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d', { willReadFrequently: true });
+        var uploadFile = document.getElementById('uploadFile');
+        document.getElementById('uploadFile').addEventListener('change', handleFile, false);
+
+        function handleFile(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    // add some random noise to the canvas
+                    for (var i = 0; i < canvas.width; i++) {
+                        for (var j = 0; j < canvas.height; j++) {
+                            var pixel = ctx.getImageData(i, j, 1, 1);
+                            pixel.data[0] = pixel.data[0] + Math.random() * 350;
+                            pixel.data[1] = pixel.data[1] + Math.random() * 250;
+                            pixel.data[2] = pixel.data[2] + Math.random() * 150;
+                            ctx.putImageData(pixel, i, j);
+                        }
+                    }
+                    
+
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    </script>
+</body>
+</html>
