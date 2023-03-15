@@ -4,6 +4,7 @@
 </head>
 <body>
     <canvas id="canvas" ></canvas>
+    Image generation takes between 15-30sec.
     <input type="file" id="uploadFile" />
 
     <script>
@@ -24,8 +25,8 @@
         }
 
         // Usage:
-        let random = xorshift128([912440920, 524917981, 14737322, 589370090]);
-        console.log("0." + random());
+        let random = xorshift128([9, 5, 1, 6]);
+        //console.log("0." + random());
 
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -41,6 +42,7 @@
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0);
                     // add some random noise to the canvas
+                    
                     for (var i = 0; i < canvas.width; i++) {
                         //rnd = Math.random();
                         rnd = "0." + random();
