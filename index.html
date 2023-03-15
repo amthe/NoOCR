@@ -7,6 +7,26 @@
     <input type="file" id="uploadFile" />
 
     <script>
+        
+        // Seed must be an array of length 4
+        function xorshift128(seed) {
+        let s = seed.slice();
+        return function() {
+            let s1 = s[0];
+            let s0 = s[1];
+            s[0] = s[2];
+            s1 ^= s1 << 23;
+            s[1] = s1 ^ s0 ^ (s1 >> 17) ^ (s0 >> 26);
+            s[2] = s0;
+            s[3] = s[3] + 362437 | 0;
+            return (s[1] + s[3]) | 0;
+        }
+        }
+
+        // Usage:
+        let random = xorshift128([912440920, 524917981, 14737322, 589370090]);
+        console.log("0." + random());
+
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d', { willReadFrequently: true });
         var uploadFile = document.getElementById('uploadFile');
@@ -22,11 +42,13 @@
                     ctx.drawImage(img, 0, 0);
                     // add some random noise to the canvas
                     for (var i = 0; i < canvas.width; i++) {
+                        //rnd = Math.random();
+                        rnd = "0." + random();
                         for (var j = 0; j < canvas.height; j++) {
                             var pixel = ctx.getImageData(i, j, 1, 1);
-                            pixel.data[0] = pixel.data[0] + Math.random() * 400;
-                            pixel.data[1] = pixel.data[1] + Math.random() * 400;
-                            pixel.data[2] = pixel.data[2] + Math.random() * 400;
+                            pixel.data[0] = pixel.data[0] + rnd * 350;
+                            pixel.data[1] = pixel.data[1] + rnd * 350;
+                            pixel.data[2] = pixel.data[2] + rnd * 350;
                             ctx.putImageData(pixel, i, j);
                         }
                     }
